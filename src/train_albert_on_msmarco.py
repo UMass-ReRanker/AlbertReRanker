@@ -87,7 +87,8 @@ if __name__=='__main__':
     parser.add_argument("--num_nodes", type=int, default=1, help="Num nodes allocated by SLURM")
     parser.add_argument("--distributed_backend", type=str, default='ddp',
                         help="Use distributed backend: dp/ddp/ddp2")
-
+    
+    hparams = parser.parse_args()
     if hparams.val_data_loader_bs <= 0:
         hparams.val_data_loader_bs = hparams.data_loader_bs
     print(hparams)

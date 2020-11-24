@@ -260,6 +260,6 @@ class AlbertReRanker(pl.LightningModule):
         df['rank'] = df.groupby('qid')['prob'].rank(ascending=False)
         df.rank = df.rank.astype(int)
         df = df[['qid', 'Q0', 'did', 'rank', 'prob', 'run_name']]
-        df.to_csv(f'{self.hparams.run_name}.tsv',
+        df.to_csv(f'msmarco-test-qrels.tsv',
                   sep=' ', header=False, index=False)
         return
