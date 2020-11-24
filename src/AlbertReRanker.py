@@ -256,7 +256,7 @@ class AlbertReRanker(pl.LightningModule):
         df = pd.DataFrame(
             {'prob': probs, 'idx': idxs, 'qid': qids, 'did': dids})
         df['Q0'] = 'Q0'
-        df['run_name'] = self.hparams.run_name
+        df['run_name'] = 'albert-reranker'
         df['rank'] = df.groupby('qid')['prob'].rank(ascending=False)
         df.rank = df.rank.astype(int)
         df = df[['qid', 'Q0', 'did', 'rank', 'prob', 'run_name']]
