@@ -75,7 +75,7 @@ class MarcoDataset(Dataset):
         if self.mode == 'train' or self.mode == 'dev':
             docentry = self.docs.loc[(self.docs['qid'] == x.qid) & (self.docs['did'] == x.did)]
             try:
-                document = docentry.dtext.item()
+                document = 'N/A' if docentry.empty or ((type(docentry.dtext.item()) != str) and math.isnan(docentry.dtext)) else docentry.dtext.item()
             except:
                 document = 'N/A'
             label = 0 if self.relations.loc[(self.relations['qid'] == x.qid) & (self.relations['did'] == x.did)].empty else 1
