@@ -58,6 +58,9 @@ class MarcoDataset(Dataset):
             queries = np.random.choice(queries, int(len(queries)/50), replace=False)
             print(len(queries))
             self.top100 = self.top100[self.top100['qid'].isin(queries)]
+            self.docs = pd.read_csv(os.path.join(data_dir, 'msmarco-docsdev.tsv'), 
+                                sep='\t', header=None, names=['qid', 'did', 'qtext', 'dtext'], encoding='utf-8')
+
         print(f'{mode} set len:', len(self.top100))
 
     # needed for map-style torch Datasets
@@ -69,7 +72,7 @@ class MarcoDataset(Dataset):
         x = self.top100.iloc[idx]
         query = self.queries.loc[x.qid].query_text
         label = 0
-        if self.mode == 'train':
+        if self.mode == 'train' or self.mode == 'dev':
             docentry = self.docs.loc[(self.docs['qid'] == x.qid) & (self.docs['did'] == x.did)]
             document = 'N/A' if docentry.empty or ((type(docentry.dtext.item()) != str) and math.isnan(docentry.dtext)) else docentry.dtext.item()
             label = 0 if self.relations.loc[(self.relations['qid'] == x.qid) & (self.relations['did'] == x.did)].empty else 1
@@ -83,9 +86,7 @@ class MarcoDataset(Dataset):
             splited = line.split('\t')
             # when using num_workers > 1 seek get's fucked up
             assert(splited[0] == x.did)
-            document = ' '.join(splited[3:])
-            if self.mode == 'dev':
-                label = 0 if self.relations.loc[(self.relations['qid'] == x.qid) & (self.relations['did'] == x.did)].empty else 1
+            document = ' '.join(splited[3:]) 
         tensors = self.one_example_to_tensors(query, document, idx, label)
         return tensors
 
