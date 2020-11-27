@@ -4,3 +4,4 @@ lightning_logs/
 *.sh
 *.ipynb
 __pycache__/
+*.tsv

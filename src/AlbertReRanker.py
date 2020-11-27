@@ -257,8 +257,9 @@ class AlbertReRanker(pl.LightningModule):
             {'prob': probs, 'idx': idxs, 'qid': qids, 'did': dids})
         df['Q0'] = 'Q0'
         df['run_name'] = 'albert-reranker'
-        df['rank'] = df.groupby('qid')['prob'].rank(ascending=False)
-        df.rank = df.rank.astype(int)
+        df['prank'] = df.groupby('qid')['prob'].rank(ascending=0)
+        df.prank = df.prank.astype(int)
+        df = df.rename(columns={"prank" : "rank"})
         df = df[['qid', 'Q0', 'did', 'rank', 'prob', 'run_name']]
         df.to_csv(f'msmarco-test-qrels.tsv',
                   sep=' ', header=False, index=False)
