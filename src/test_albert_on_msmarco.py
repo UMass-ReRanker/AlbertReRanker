@@ -10,7 +10,22 @@ def main(hparams):
     if 'model.albert.embeddings.position_ids' in checkpoint['state_dict']:
         del checkpoint['state_dict']['model.albert.embeddings.position_ids']
     model.load_state_dict(checkpoint['state_dict'])    
-    trainer = pl.Trainer()
+    trainer = pl.Trainer(
+            gpus=-1,
+            num_nodes=hparams.num_nodes,
+            accelerator=hparams.distributed_backend,
+            # control the effective batch size with this param
+            accumulate_grad_batches=hparams.trainer_batch_size,
+            # Training will stop if max_steps or max_epochs have reached (earliest).
+            max_epochs=hparams.epochs,
+            max_steps=hparams.num_training_steps, 
+            # progress_bar_callback=False,
+            # progress_bar_refresh_rate=0,
+            # use_amp=True --> use 16bit precision
+            # val_check_interval=0.25, # val 4 times during 1 train epoch
+            val_check_interval=hparams.val_check_interval, # val every N steps
+            # num_sanity_val_steps=5,)
+            )
     trainer.test(model)
     
 if __name__=='__main__':
