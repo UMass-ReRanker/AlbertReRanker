@@ -29,7 +29,7 @@ python sentence_selection.py
 
 3. ALBERT Fine Tuning - 
 ```
-python train_albert_on_msmarco.py --data_loader_bs=12 --trainer_batch_size=10 --data_dir='/mnt/nfs/scratch1/krajbhara/longformer/data/' --max_seq_len=512 --val_check_interval=600 --lr=9e-6
+python train_albert_on_msmarco.py --data_loader_bs=12 --trainer_batch_size=10 --data_dir='<MS-MARCO DATA DIR>' --max_seq_len=512 --val_check_interval=600 --lr=9e-6
 
 ```
 
