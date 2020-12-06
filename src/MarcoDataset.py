@@ -33,8 +33,7 @@ class MarcoDataset(Dataset):
         
         # downsample the dataset so the positive:negative ratio is 1:10
         if mode == 'train':
-
-            qids = []
+           ''' qids = []
             with open(os.path.join(data_dir, 'msmarco-doctrain-selected-queries.txt'), "r") as file:
                 lines = file.readlines()
                 count = 0
@@ -43,11 +42,11 @@ class MarcoDataset(Dataset):
                     qids.append(int(line))
                     if count >= sample_size:
                         break
-            self.top100 = self.top100.loc[self.top100['qid'].isin(qids)]
-            self.top100 = self.top100.sample(frac=0.1, random_state=42).append(self.relations[['qid', 'did']],ignore_index=True)
-            self.top100.drop_duplicates(keep='first', inplace=True)
-            # shuffle the data so positives are ~ evenly distributed
-            self.top100 = self.top100.sample(frac=1, random_state=42).reset_index(drop=True) 
+           '''#self.top100 = self.top100.loc[self.top100['qid'].isin(qids)]
+           self.top100 = self.top100.sample(frac=0.1, random_state=42).append(self.relations[['qid', 'did']],ignore_index=True)
+           self.top100.drop_duplicates(keep='first', inplace=True)
+           # shuffle the data so positives are ~ evenly distributed
+           self.top100 = self.top100.sample(frac=1, random_state=42).reset_index(drop=True) 
            # self.docs = pd.read_csv(os.path.join(data_dir, 'msmarco-docstrain.tsv'), 
            #                     sep='\t', header=None, names=['qid', 'did', 'qtext', 'dtext'], encoding='utf-8')
                                         
